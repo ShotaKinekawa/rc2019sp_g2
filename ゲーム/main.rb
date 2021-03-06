@@ -1,22 +1,33 @@
-# 基本となるdxrubyとchipmunkライブラリを読み込む
 require 'dxruby'
 require 'chipmunk'
 
-# chipmunkをより簡潔に使えるようにするためのラッパー（本講習独自作成）を読み込む
 require_relative 'lib/cp'
 
+require_relative 'scene'
+require_relative 'scenes/title/director'
+require_relative 'scenes/clear/director'
+require_relative 'scenes/gameover/director'
+require_relative 'scenes/gameend/director'
 
-# ウィンドウのサイズを設定
-Window.width = 800
-Window.height = 600
+require_relative 'scenes/game/director'
+require_relative 'scenes/game/ball.rb'
+require_relative 'scenes/game/trigger'
+require_relative 'scenes/game/block'
+require_relative 'scenes/game/grand'
 
-# ゲームウィンドウを生成し、メインループを開始する
-# 本メソッド（Window.loop）は、プログラム中に1個までとする）
+
+
+Window.width = 500
+Window.height = 650
+
+Scene.add(Title::Director.new, :title)
+Scene.add(Game::Director.new, :game)
+Scene.add(Clear::Director.new, :clear)
+Scene.add(Gameover::Director.new, :gameover)
+Scene.add(Gameend::Director.new, :gameend)
+Scene.move_to :title
+
 Window.loop do
-    # ESCキー押下にてゲームを終了（メインループを抜ける）
-    break if Input.key_push?(K_ESCAPE)
-  
-    
-  end
-  
-
+  break if Input.key_push?(K_ESCAPE)
+  Scene.play
+end
